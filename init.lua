@@ -16,6 +16,14 @@ Plug 'ThePrimeagen/vim-be-good'
 Plug 'ThePrimeagen/harpoon'
 Plug 'numToStr/Comment.nvim'
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+Plug 'hrsh7th/nvim-cmp'
+Plug 'hrsh7th/cmp-nvim-lsp'
+Plug 'hrsh7th/cmp-buffer'
+Plug 'hrsh7th/cmp-path'
+Plug 'hrsh7th/cmp-cmdline'
+Plug 'saadparwaiz1/cmp_luasnip'
+Plug 'L3MON4D3/LuaSnip'
+Plug 'rafamadriz/friendly-snippets'
 call plug#end()
 ]]
 
@@ -91,6 +99,7 @@ map('n', 'N', 'Nzzzv', opts)
 -- LSP Keymaps
 map('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>', opts)
 map('n', '<Leader>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
+map('n', 'K', '<cmd>lua vim.lsp.buf.hover()<CR>', opts)
 
 -- Prettier run
 --map('n', '<Leader>p', ':!prettier --write %<CR>', opts)
@@ -117,6 +126,7 @@ require("mason-lspconfig").setup({
         "phpactor",
         "pyright",
         "eslint",
+        "omnisharp",
         "emmet_ls"
     },
 })
@@ -129,8 +139,36 @@ require'nvim-treesitter.configs'.setup {
     enable = true,
   },
 }
+
+-- snippets
+local cmp = require'cmp'
+local luasnip = require'luasnip'
+
+require("luasnip.loaders.from_vscode").lazy_load()
+
+cmp.setup({
+  snippet = {
+    expand = function(args)
+      luasnip.lsp_expand(args.body)
+    end,
+  },
+  mapping = cmp.mapping.preset.insert({
+    ['<Tab>'] = cmp.mapping.select_next_item(),
+    ['<S-Tab>'] = cmp.mapping.select_prev_item(),
+    ['<CR>'] = cmp.mapping.confirm({ select = true }),
+    ['<C-Space>'] = cmp.mapping.complete(),
+  }),
+  sources = cmp.config.sources({
+    { name = 'nvim_lsp' },
+    { name = 'luasnip' },
+  }, {
+    { name = 'buffer' },
+  })
+})
+
 local lspconfig = require("lspconfig")
 local capabilities = vim.lsp.protocol.make_client_capabilities()
+capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
 
 lspconfig.html.setup({ capabilities = capabilities })
 lspconfig.cssls.setup({ capabilities = capabilities })
