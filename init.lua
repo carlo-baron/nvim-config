@@ -35,6 +35,7 @@ require('lualine').setup({
 require('Comment').setup()
 
 -- Basic Settings
+vim.opt.swapfile = false
 vim.opt.number = true
 vim.opt.relativenumber = true
 vim.opt.cursorline = true
@@ -59,6 +60,7 @@ vim.cmd([[
   syntax on
   filetype plugin indent on
   autocmd FileType html,css EmmetInstall
+  autocmd FileType javascriptreact,typescriptreact setlocal tabstop=2 shiftwidth=2 expandtab
 ]])
 
 -- Escape key remap
@@ -127,7 +129,8 @@ require("mason-lspconfig").setup({
         "pyright",
         "eslint",
         "omnisharp",
-        "emmet_ls"
+        "emmet_ls",
+        "clangd"
     },
 })
 require'nvim-treesitter.configs'.setup {
@@ -172,8 +175,10 @@ capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
 
 lspconfig.html.setup({ capabilities = capabilities })
 lspconfig.cssls.setup({ capabilities = capabilities })
-lspconfig.ts_ls.setup({ capabilities = capabilities })
 lspconfig.phpactor.setup({ capabilities = capabilities })
 lspconfig.pyright.setup({ capabilities = capabilities })
-lspconfig.eslint.setup({ capabilities = capabilities })
+lspconfig.eslint.setup({ 
+    capabilities = capabilities
+})
 lspconfig.emmet_ls.setup({ capabilities = capabilities })
+lspconfig.clangd.setup{}
