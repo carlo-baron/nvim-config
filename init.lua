@@ -1,5 +1,6 @@
 vim.cmd [[
 call plug#begin('~/.local/share/nvim/plugged')
+Plug 'tpope/vim-surround'
 Plug 'neovim/nvim-lspconfig'
 Plug 'williamboman/mason.nvim'
 Plug 'williamboman/mason-lspconfig.nvim'
@@ -60,7 +61,7 @@ vim.cmd([[
   syntax on
   filetype plugin indent on
   autocmd FileType html,css EmmetInstall
-  autocmd FileType javascriptreact,typescriptreact setlocal tabstop=2 shiftwidth=2 expandtab
+  autocmd FileType javascriptreact,typescriptreact,typescript,javascript setlocal tabstop=2 shiftwidth=2 expandtab
 ]])
 
 -- Escape key remap
