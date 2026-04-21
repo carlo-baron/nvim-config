@@ -30,13 +30,13 @@ return {
 				require("fzf-lua").files()
 			end,
 		},
-		{
-			"<leader>l",
-			function()
-				require("fzf-lua").live_grep()
-			end,
-			"norremap",
-		},
+--		{
+--			"<leader>l",
+--			function()
+--				require("fzf-lua").live_grep()
+--			end,
+--			"norremap",
+--		},
 	},
 	---@diagnostic enable: missing-fields
 }
