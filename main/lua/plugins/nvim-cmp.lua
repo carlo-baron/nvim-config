@@ -2,6 +2,8 @@ return {
 	"hrsh7th/nvim-cmp",
 	dependencies = {
 		"L3MON4D3/LuaSnip",
+		"saadparwaiz1/cmp_luasnip",
+		"rafamadriz/friendly-snippets",
 		"hrsh7th/cmp-nvim-lsp",
 		"hrsh7th/cmp-buffer",
 		"hrsh7th/cmp-path",
@@ -10,6 +12,11 @@ return {
 	opts = function(_, opts)
 		local cmp = require("cmp")
 		local luasnip = require("luasnip")
+
+		require("luasnip.loaders.from_vscode").lazy_load()
+		luasnip.config.setup({
+			enable_autosnippets = true,
+		})
 
 		local has_words_before = function()
 			local line, col = unpack(vim.api.nvim_win_get_cursor(0))
@@ -32,15 +39,26 @@ return {
 			},
 		})
 
+		opts.snippet = {
+			expand = function(args)
+				luasnip.lsp_expand(args.body)
+			end,
+		}
+
 		opts.mapping = vim.tbl_extend("force", opts.mapping or {}, {
-			["<CR>"] = cmp.mapping.confirm({
-				select = true,
-			}),
+			["<CR>"] = cmp.mapping(function(fallback)
+				if cmp.visible() and cmp.get_active_entry() then
+					cmp.confirm({ select = false })
+				else
+					fallback()
+				end
+			end, { "i", "s" }),
+
 			["<Tab>"] = cmp.mapping(function(fallback)
 				if cmp.visible() then
 					cmp.select_next_item()
-				elseif luasnip.expand_or_jumpable() then
-					luasnip.expand_or_jump()
+				elseif luasnip.locally_jumpable(1) then
+					luasnip.jump(1)
 				elseif has_words_before() then
 					cmp.complete()
 				else
@@ -51,7 +69,7 @@ return {
 			["<S-Tab>"] = cmp.mapping(function(fallback)
 				if cmp.visible() then
 					cmp.select_prev_item()
-				elseif luasnip.jumpable(-1) then
+				elseif luasnip.locally_jumpable(-1) then
 					luasnip.jump(-1)
 				else
 					fallback()
@@ -69,21 +87,17 @@ return {
 		opts.formatting = {
 			format = function(entry, vim_item)
 				local item = entry.completion_item
-
 				local detail = ""
 				if item.labelDetails and item.labelDetails.description then
-				detail = item.labelDetails.description
-
+					detail = item.labelDetails.description
 				elseif item.detail then
 					detail = item.detail
 				end
-
 				if detail ~= "" then
 					vim_item.menu = detail
 				else
 					vim_item.menu = ""
 				end
-
 				return vim_item
 			end,
 		}
