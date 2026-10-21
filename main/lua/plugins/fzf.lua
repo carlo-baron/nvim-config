@@ -1,42 +1,28 @@
 return {
 	"ibhagwan/fzf-lua",
-	cmd = "FzfLua",
-	-- optional for icon support
+	commit = "d5c12c6",
+	lazy = true,
 	dependencies = { "nvim-tree/nvim-web-devicons" },
-	-- or if using mini.icons/mini.nvim
-	-- dependencies = { "nvim-mini/mini.icons" },
-	---@module "fzf-lua"
-	---@type fzf-lua.Config|{}
-	---@diagnostic disable: missing-fields
-
-	opts = function()
-		local actions = require("fzf-lua").actions
-		return {
-			files = {
-				hidden = true,
-				no_ignore = true,
-			},
-			actions = {
-				files = {
-					["default"] = actions.file_edit,
-				},
-			},
-		}
-	end,
+	opts = {
+		files = {
+			hidden = true,
+			no_ignore = true,
+		},
+	},
 	keys = {
 		{
 			"<leader>f",
 			function()
 				require("fzf-lua").files()
 			end,
+			desc = "Find files",
 		},
---		{
---			"<leader>l",
---			function()
---				require("fzf-lua").live_grep()
---			end,
---			"norremap",
---		},
+		{
+			"<leader>l",
+			function()
+				require("fzf-lua").live_grep()
+			end,
+			desc = "Live grep",
+		},
 	},
-	---@diagnostic enable: missing-fields
 }
