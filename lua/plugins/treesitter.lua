@@ -5,17 +5,17 @@ return {
 	config = function()
 		require("nvim-treesitter").install({
 			"lua", "javascript", "typescript", "tsx",
-			"python", "c_sharp", "html", "css",
+			"python", "c", "c_sharp", "html", "css",
 			"json", "yaml", "markdown", "markdown_inline",
 			"bash", "vim", "vimdoc",
 		})
 
 		vim.api.nvim_create_autocmd("FileType", {
 			pattern = {
-				"lua", "javascript", "typescript", "tsx",
-				"python", "cs", "html", "css",
+				"lua", "javascript", "javascriptreact", "typescript", "typescriptreact",
+				"python", "c", "cs", "html", "css",
 				"json", "yaml", "markdown",
-				"bash", "vim", "vimdoc",
+				"sh", "vim", "help",
 			},
 			callback = function(args)
 				local max_filesize = 100 * 1024
@@ -29,8 +29,8 @@ return {
 
 		vim.api.nvim_create_autocmd("FileType", {
 			pattern = {
-				"lua", "javascript", "typescript", "tsx",
-				"python", "cs", "html", "css", "json", "yaml",
+				"lua", "javascript", "javascriptreact", "typescript", "typescriptreact",
+				"python", "c", "cs", "html", "css", "json", "yaml",
 			},
 			callback = function()
 				vim.wo[0][0].foldmethod = "expr"
@@ -41,7 +41,7 @@ return {
 
 		vim.api.nvim_create_autocmd("FileType", {
 			pattern = {
-				"lua", "javascript", "typescript", "tsx",
+				"lua", "javascript", "javascriptreact", "typescript", "typescriptreact",
 				"python", "html",
 			},
 			callback = function()

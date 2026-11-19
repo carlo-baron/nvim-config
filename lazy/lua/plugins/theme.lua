@@ -1,1 +1,0 @@
-/home/lods/.config/omarchy/current/theme/neovim.lua
